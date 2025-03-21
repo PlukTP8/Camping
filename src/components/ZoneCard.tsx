@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { MapPin, Users, ArrowRight } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -67,7 +67,7 @@ const ZoneCard: React.FC<ZoneCardProps> = ({ zone, className }) => {
       
       <CardFooter className="p-5 pt-0">
         <Button asChild className="w-full mt-2 rounded-full group">
-          <Link to={`/zones/${zone.id}`} className="flex items-center justify-center gap-2">
+          <Link href={`/zones/${zone.id}`} className="flex items-center justify-center gap-2">
             <span>ดูรายละเอียด</span>
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Menu, X, Tent, Moon, Sun } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from '@/lib/utils';
@@ -9,7 +10,7 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const location = useLocation();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     setIsOpen(false);
-  }, [location]);
+  }, [router.pathname]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -52,7 +53,7 @@ const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link 
-          to="/" 
+          href="/" 
           className="flex items-center gap-2 text-primary font-display"
         >
           <Tent className="h-6 w-6" />
@@ -64,10 +65,10 @@ const Navbar: React.FC = () => {
           {navLinks.map((link) => (
             <Link
               key={link.path}
-              to={link.path}
+              href={link.path}
               className={cn(
                 'animated-link text-sm font-medium transition-colors',
-                location.pathname === link.path 
+                router.pathname === link.path 
                   ? 'text-primary after:w-full' 
                   : 'text-foreground/80 hover:text-foreground'
               )}
@@ -90,6 +91,7 @@ const Navbar: React.FC = () => {
 
           <Button 
             className="rounded-full hidden md:flex"
+            onClick={() => router.push('/zones')}
           >
             จองเลย
           </Button>
@@ -117,10 +119,10 @@ const Navbar: React.FC = () => {
         {navLinks.map((link) => (
           <Link
             key={link.path}
-            to={link.path}
+            href={link.path}
             className={cn(
               'text-lg font-medium transition-colors animate-fade-in',
-              location.pathname === link.path 
+              router.pathname === link.path 
                 ? 'text-primary' 
                 : 'text-foreground/80 hover:text-foreground'
             )}
@@ -128,7 +130,10 @@ const Navbar: React.FC = () => {
             {link.name}
           </Link>
         ))}
-        <Button className="mt-4 rounded-full animate-fade-in">
+        <Button 
+          className="mt-4 rounded-full animate-fade-in"
+          onClick={() => router.push('/zones')}
+        >
           จองเลย
         </Button>
       </div>
