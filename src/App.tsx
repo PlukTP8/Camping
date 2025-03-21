@@ -5,10 +5,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import Index from "./pages/Index";
-import ZoneDetails from "./pages/ZoneDetails";
-import Booking from "./pages/Booking";
-import NotFound from "./pages/NotFound";
+import Index from "./pages/index";
+import ZoneDetails from "./pages/zones/[id]";
+import Booking from "./pages/booking";
+import NotFound from "./pages/404";
 
 const queryClient = new QueryClient();
 

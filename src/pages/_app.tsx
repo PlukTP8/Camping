@@ -16,10 +16,12 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <AnimatePresence mode="wait">
+        <div className="relative">
           <Navbar />
-          <Component {...pageProps} key={router.route} />
-        </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <Component {...pageProps} key={router.route} />
+          </AnimatePresence>
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );

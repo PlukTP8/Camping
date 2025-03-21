@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { CampingZone, CampingSpot, DateRange, ReservationStatus } from '@/lib/types';
+import { CampingZone, CampingSpot, DateRange, ReservationStatus, SpotSize, SpotStatus } from '@/lib/types';
 import ReservationSummary from '@/components/ReservationSummary';
 
 // Mock data - in a real app, you would fetch this from your API
@@ -40,8 +40,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     id: spotId as string,
     zoneId: zoneId as string,
     name: "A1-1",
-    size: "small",
-    status: "available",
+    size: SpotSize.Small,
+    status: SpotStatus.Available,
     location: { x: 10, y: 10 }
   };
 

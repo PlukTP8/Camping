@@ -1,16 +1,15 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { ArrowLeft, Star, Users, Tent, Wifi, Flame, DropletHalf2 } from 'lucide-react';
+import { ArrowLeft, Star, Users, Tent, Wifi, Flame, Droplets } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CampingZone, CampingSpot, DateRange } from '@/lib/types';
+import { CampingZone, CampingSpot, DateRange, SpotSize, SpotStatus } from '@/lib/types';
 import SpotSelector from '@/components/SpotSelector';
 import DatePicker from '@/components/DatePicker';
 import ReservationSummary from '@/components/ReservationSummary';
@@ -35,24 +34,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       id: "1",
       zoneId: id as string,
       name: "A1-1",
-      size: "small",
-      status: "available",
+      size: SpotSize.Small,
+      status: SpotStatus.Available,
       location: { x: 10, y: 10 }
     },
     {
       id: "2",
       zoneId: id as string,
       name: "A1-2",
-      size: "medium",
-      status: "available",
+      size: SpotSize.Medium,
+      status: SpotStatus.Available,
       location: { x: 30, y: 10 }
     },
     {
       id: "3",
       zoneId: id as string,
       name: "A1-3",
-      size: "large",
-      status: "occupied",
+      size: SpotSize.Large,
+      status: SpotStatus.Occupied,
       location: { x: 50, y: 10 }
     }
   ];
@@ -103,7 +102,7 @@ const ZoneDetails: React.FC<ZoneDetailsProps> = ({ zone, spots }) => {
   const amenityIcons: Record<string, React.ReactNode> = {
     "Wi-Fi": <Wifi className="h-4 w-4" />,
     "จุดก่อไฟ": <Flame className="h-4 w-4" />,
-    "น้ำดื่ม": <DropletHalf2 className="h-4 w-4" />,
+    "น้ำดื่ม": <Droplets className="h-4 w-4" />,
   };
 
   return (
