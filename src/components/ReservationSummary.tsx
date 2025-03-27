@@ -47,7 +47,7 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
           </div>
         </div>
 
-        {spot && (
+        {spot ? (
           <div className="flex items-start gap-3">
             <Tent className="h-5 w-5 text-camping-green-dark mt-0.5" />
             <div>
@@ -56,6 +56,10 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
                 ขนาด: {spot.size === 'small' ? 'เล็ก' : spot.size === 'medium' ? 'กลาง' : 'ใหญ่'}
               </p>
             </div>
+          </div>
+        ) : (
+          <div className="text-sm text-muted-foreground text-center py-2 border border-dashed rounded-md">
+            กรุณาเลือกจุดกางเต๊นท์
           </div>
         )}
 

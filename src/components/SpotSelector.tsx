@@ -34,6 +34,11 @@ const SpotSelector: React.FC<SpotSelectorProps> = ({
     }
   };
 
+  const handleSpotSelect = (spot: CampingSpot) => {
+    console.log("Selecting spot in SpotSelector:", spot);
+    onSpotSelect(spot);
+  };
+
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
@@ -65,7 +70,7 @@ const SpotSelector: React.FC<SpotSelectorProps> = ({
           zone={zone}
           spots={spots}
           selectedSpotId={selectedSpotId}
-          onSpotSelect={onSpotSelect}
+          onSpotSelect={handleSpotSelect}
           className="w-full aspect-[4/3] md:aspect-[16/9] shadow-sm"
         />
       ) : (
@@ -74,7 +79,7 @@ const SpotSelector: React.FC<SpotSelectorProps> = ({
             {availableSpots.map((spot) => (
               <button
                 key={spot.id}
-                onClick={() => onSpotSelect(spot)}
+                onClick={() => handleSpotSelect(spot)}
                 className={cn(
                   "flex flex-col p-3 rounded-lg border hover:border-primary transition-all duration-200",
                   selectedSpotId === spot.id

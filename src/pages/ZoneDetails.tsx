@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -15,7 +14,6 @@ import ReservationSummary from '@/components/ReservationSummary';
 import { CampingZone, CampingSpot, DateRange, SpotStatus, SpotSize } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 
-// Mock data for initial development
 const mockZones: Record<string, CampingZone> = {
   '1': {
     id: '1',
@@ -46,7 +44,6 @@ const mockZones: Record<string, CampingZone> = {
   },
 };
 
-// Mock data for spots
 const generateMockSpots = (zoneId: string): CampingSpot[] => {
   const spots: CampingSpot[] = [];
   const total = Math.floor(Math.random() * 10) + 10; // 10-20 spots
@@ -74,8 +71,8 @@ const generateMockSpots = (zoneId: string): CampingSpot[] => {
 
 const mockPhotos = [
   'https://images.unsplash.com/photo-1455496231601-e6195da1f841?q=80&w=1470&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1525811902-f2342640856e?q=80&w=1471&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1515444744559-7be63e1600de?q=80&w=1470&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1517824806704-9040b037703b?q=80&w=1470&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1510312305653-8ed496efae75?q=80&w=1374&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=1470&auto=format&fit=crop',
 ];
 
@@ -87,25 +84,32 @@ const ZoneDetails: React.FC = () => {
   const [selectedSpot, setSelectedSpot] = useState<CampingSpot | undefined>(undefined);
   const [dateRange, setDateRange] = useState<DateRange>({ from: undefined, to: undefined });
 
-  // Get zone data based on ID
   const zone = id ? mockZones[id] : null;
   const spots = id ? generateMockSpots(id) : [];
 
   const handleSpotSelect = (spot: CampingSpot) => {
+    console.log("Spot selected:", spot);
     setSelectedSpot(spot);
     toast({
       title: "จุดกางเต๊นท์ถูกเลือกแล้ว",
       description: `จุดกางเต๊นท์ ${spot.name} ถูกเลือกแล้ว`,
     });
+    if (activeTab !== 'book') {
+      setActiveTab('book');
+    }
   };
 
   const handleDateRangeChange = (range: DateRange) => {
+    console.log("Date range changed:", range);
     setDateRange(range);
     if (range.from && range.to) {
       toast({
         title: "วันที่ถูกเลือกแล้ว",
         description: `วันที่เข้าพัก: ${range.from.toLocaleDateString('th-TH')} - ${range.to.toLocaleDateString('th-TH')}`,
       });
+      if (activeTab !== 'book') {
+        setActiveTab('book');
+      }
     }
   };
 
@@ -118,6 +122,14 @@ const ZoneDetails: React.FC = () => {
           startDate: dateRange.from,
           endDate: dateRange.to 
         } 
+      });
+    } else {
+      toast({
+        title: "ไม่สามารถดำเนินการต่อได้",
+        description: !selectedSpot 
+          ? "กรุณาเลือกจุดกางเต๊นท์" 
+          : "กรุณาเลือกวันที่เข้าพัก",
+        variant: "destructive"
       });
     }
   };
@@ -139,7 +151,6 @@ const ZoneDetails: React.FC = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      {/* Hero Banner */}
       <div className="relative h-[50vh] pt-16">
         <div className="absolute inset-0">
           <img 
@@ -189,7 +200,6 @@ const ZoneDetails: React.FC = () => {
         </div>
       </div>
       
-      {/* Content */}
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
           <div className="flex justify-between items-center border-b mb-6">
@@ -199,7 +209,12 @@ const ZoneDetails: React.FC = () => {
               <TabsTrigger value="photos" className="text-base">รูปภาพ</TabsTrigger>
             </TabsList>
             
-            <Button className="hidden md:flex">จองเลย</Button>
+            <Button 
+              className="hidden md:flex" 
+              onClick={() => setActiveTab('book')}
+            >
+              จองเลย
+            </Button>
           </div>
           
           <TabsContent value="overview" className="mt-6">
@@ -330,7 +345,6 @@ const ZoneDetails: React.FC = () => {
   );
 };
 
-// Helper component
 const Check: React.FC<{ className?: string }> = ({ className }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 

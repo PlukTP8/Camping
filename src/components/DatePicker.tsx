@@ -61,6 +61,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
               to: dateRange.to 
             }}
             onSelect={(selected) => {
+              console.log("Calendar selected:", selected);
               onDateRangeChange({
                 from: selected?.from,
                 to: selected?.to,
