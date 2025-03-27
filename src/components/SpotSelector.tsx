@@ -6,6 +6,7 @@ import ZoneMap from './ZoneMap';
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Check, MapPin, Users, Square } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface SpotSelectorProps {
   zone: CampingZone;
@@ -23,6 +24,7 @@ const SpotSelector: React.FC<SpotSelectorProps> = ({
   className,
 }) => {
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const { toast } = useToast();
   const availableSpots = spots.filter(spot => spot.status === 'available');
 
   const getSpotSizeText = (size: string) => {
@@ -37,6 +39,10 @@ const SpotSelector: React.FC<SpotSelectorProps> = ({
   const handleSpotSelect = (spot: CampingSpot) => {
     console.log("Selecting spot in SpotSelector:", spot);
     onSpotSelect(spot);
+    toast({
+      title: "เลือกจุดกางเต๊นท์แล้ว",
+      description: `จุดกางเต๊นท์ ${spot.name} ในโซน ${zone.name}`,
+    });
   };
 
   return (

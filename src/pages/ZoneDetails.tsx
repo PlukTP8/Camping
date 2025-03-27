@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Users, Calendar, Info, Camera, Star } from 'lucide-react';
@@ -13,6 +14,248 @@ import SpotSelector from '@/components/SpotSelector';
 import ReservationSummary from '@/components/ReservationSummary';
 import { CampingZone, CampingSpot, DateRange, SpotStatus, SpotSize } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+
+// Setup consistent camping spots
+const getFixedCampingSpots = (zoneId: string): CampingSpot[] => {
+  if (zoneId === '1') {
+    return [
+      {
+        id: `${zoneId}-1`,
+        zoneId,
+        name: '1',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 20, y: 30 }
+      },
+      {
+        id: `${zoneId}-2`,
+        zoneId,
+        name: '2',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 35, y: 25 }
+      },
+      {
+        id: `${zoneId}-3`,
+        zoneId,
+        name: '3',
+        size: SpotSize.Large,
+        status: SpotStatus.Available,
+        location: { x: 50, y: 40 }
+      },
+      {
+        id: `${zoneId}-4`,
+        zoneId,
+        name: '4',
+        size: SpotSize.Small,
+        status: SpotStatus.Occupied,
+        location: { x: 65, y: 35 }
+      },
+      {
+        id: `${zoneId}-5`,
+        zoneId,
+        name: '5',
+        size: SpotSize.Medium,
+        status: SpotStatus.Maintenance,
+        location: { x: 80, y: 30 }
+      },
+      {
+        id: `${zoneId}-6`,
+        zoneId,
+        name: '6',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 25, y: 60 }
+      },
+      {
+        id: `${zoneId}-7`,
+        zoneId,
+        name: '7',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 40, y: 70 }
+      },
+      {
+        id: `${zoneId}-8`,
+        zoneId,
+        name: '8',
+        size: SpotSize.Large,
+        status: SpotStatus.Available,
+        location: { x: 60, y: 65 }
+      }
+    ];
+  } else if (zoneId === '2') {
+    return [
+      {
+        id: `${zoneId}-1`,
+        zoneId,
+        name: '1',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 15, y: 20 }
+      },
+      {
+        id: `${zoneId}-2`,
+        zoneId,
+        name: '2',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 30, y: 30 }
+      },
+      {
+        id: `${zoneId}-3`,
+        zoneId,
+        name: '3',
+        size: SpotSize.Large,
+        status: SpotStatus.Available,
+        location: { x: 50, y: 20 }
+      },
+      {
+        id: `${zoneId}-4`,
+        zoneId,
+        name: '4',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 70, y: 25 }
+      },
+      {
+        id: `${zoneId}-5`,
+        zoneId,
+        name: '5',
+        size: SpotSize.Medium,
+        status: SpotStatus.Occupied,
+        location: { x: 20, y: 50 }
+      },
+      {
+        id: `${zoneId}-6`,
+        zoneId,
+        name: '6',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 40, y: 60 }
+      },
+      {
+        id: `${zoneId}-7`,
+        zoneId,
+        name: '7',
+        size: SpotSize.Medium,
+        status: SpotStatus.Maintenance,
+        location: { x: 60, y: 55 }
+      },
+      {
+        id: `${zoneId}-8`,
+        zoneId,
+        name: '8',
+        size: SpotSize.Large,
+        status: SpotStatus.Available,
+        location: { x: 80, y: 60 }
+      }
+    ];
+  } else if (zoneId === '3') {
+    return [
+      {
+        id: `${zoneId}-1`,
+        zoneId,
+        name: '1',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 25, y: 15 }
+      },
+      {
+        id: `${zoneId}-2`,
+        zoneId,
+        name: '2',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 45, y: 20 }
+      },
+      {
+        id: `${zoneId}-3`,
+        zoneId,
+        name: '3',
+        size: SpotSize.Large,
+        status: SpotStatus.Occupied,
+        location: { x: 65, y: 15 }
+      },
+      {
+        id: `${zoneId}-4`,
+        zoneId,
+        name: '4',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 20, y: 40 }
+      },
+      {
+        id: `${zoneId}-5`,
+        zoneId,
+        name: '5',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 40, y: 45 }
+      },
+      {
+        id: `${zoneId}-6`,
+        zoneId,
+        name: '6',
+        size: SpotSize.Small,
+        status: SpotStatus.Maintenance,
+        location: { x: 60, y: 40 }
+      },
+      {
+        id: `${zoneId}-7`,
+        zoneId,
+        name: '7',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 30, y: 65 }
+      },
+      {
+        id: `${zoneId}-8`,
+        zoneId,
+        name: '8',
+        size: SpotSize.Large,
+        status: SpotStatus.Available,
+        location: { x: 50, y: 70 }
+      },
+      {
+        id: `${zoneId}-9`,
+        zoneId,
+        name: '9',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 70, y: 65 }
+      }
+    ];
+  } else {
+    // Default spots for any other zone
+    return [
+      {
+        id: `${zoneId}-1`,
+        zoneId,
+        name: '1',
+        size: SpotSize.Small,
+        status: SpotStatus.Available,
+        location: { x: 30, y: 30 }
+      },
+      {
+        id: `${zoneId}-2`,
+        zoneId,
+        name: '2',
+        size: SpotSize.Medium,
+        status: SpotStatus.Available,
+        location: { x: 50, y: 50 }
+      },
+      {
+        id: `${zoneId}-3`,
+        zoneId,
+        name: '3',
+        size: SpotSize.Large,
+        status: SpotStatus.Available,
+        location: { x: 70, y: 30 }
+      }
+    ];
+  }
+};
 
 const mockZones: Record<string, CampingZone> = {
   '1': {
@@ -44,31 +287,6 @@ const mockZones: Record<string, CampingZone> = {
   },
 };
 
-const generateMockSpots = (zoneId: string): CampingSpot[] => {
-  const spots: CampingSpot[] = [];
-  const total = Math.floor(Math.random() * 10) + 10; // 10-20 spots
-  
-  for (let i = 1; i <= total; i++) {
-    const id = `${zoneId}-${i}`;
-    const size = i % 4 === 0 ? SpotSize.Large : i % 3 === 0 ? SpotSize.Medium : SpotSize.Small;
-    const status = i % 7 === 0 ? SpotStatus.Maintenance : i % 5 === 0 ? SpotStatus.Occupied : SpotStatus.Available;
-    
-    spots.push({
-      id,
-      zoneId,
-      name: `${i}`,
-      size,
-      status,
-      location: {
-        x: Math.floor(Math.random() * 80) + 10, // 10-90%
-        y: Math.floor(Math.random() * 80) + 10, // 10-90%
-      },
-    });
-  }
-  
-  return spots;
-};
-
 const mockPhotos = [
   'https://images.unsplash.com/photo-1455496231601-e6195da1f841?q=80&w=1470&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1517824806704-9040b037703b?q=80&w=1470&auto=format&fit=crop',
@@ -82,18 +300,26 @@ const ZoneDetails: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedSpot, setSelectedSpot] = useState<CampingSpot | undefined>(undefined);
-  const [dateRange, setDateRange] = useState<DateRange>({ from: undefined, to: undefined });
+  const [dateRange, setDateRange] = useState<DateRange>({ 
+    from: new Date(),
+    to: new Date(new Date().setDate(new Date().getDate() + 2)) 
+  });
+  const [spots, setSpots] = useState<CampingSpot[]>([]);
 
   const zone = id ? mockZones[id] : null;
-  const spots = id ? generateMockSpots(id) : [];
+
+  // Initialize spots with fixed positions based on zoneId
+  useEffect(() => {
+    if (id) {
+      const fixedSpots = getFixedCampingSpots(id);
+      console.log("Loading fixed spots for zone:", id, fixedSpots);
+      setSpots(fixedSpots);
+    }
+  }, [id]);
 
   const handleSpotSelect = (spot: CampingSpot) => {
     console.log("Spot selected:", spot);
     setSelectedSpot(spot);
-    toast({
-      title: "จุดกางเต๊นท์ถูกเลือกแล้ว",
-      description: `จุดกางเต๊นท์ ${spot.name} ถูกเลือกแล้ว`,
-    });
     if (activeTab !== 'book') {
       setActiveTab('book');
     }
@@ -102,19 +328,18 @@ const ZoneDetails: React.FC = () => {
   const handleDateRangeChange = (range: DateRange) => {
     console.log("Date range changed:", range);
     setDateRange(range);
-    if (range.from && range.to) {
-      toast({
-        title: "วันที่ถูกเลือกแล้ว",
-        description: `วันที่เข้าพัก: ${range.from.toLocaleDateString('th-TH')} - ${range.to.toLocaleDateString('th-TH')}`,
-      });
-      if (activeTab !== 'book') {
-        setActiveTab('book');
-      }
+    if (range.from && range.to && activeTab !== 'book') {
+      setActiveTab('book');
     }
   };
 
   const handleBookingConfirm = () => {
     if (selectedSpot && dateRange.from && dateRange.to) {
+      toast({
+        title: "กำลังดำเนินการจอง",
+        description: "กำลังนำท่านไปยังหน้าจองที่พัก"
+      });
+      
       navigate('/booking', { 
         state: { 
           zoneId: zone?.id,

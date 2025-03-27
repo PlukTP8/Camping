@@ -47,6 +47,13 @@ const ZoneMap: React.FC<ZoneMapProps> = ({
     }
   };
 
+  const handleSpotClick = (spot: CampingSpot) => {
+    if (spot.status === SpotStatus.Available && onSpotSelect) {
+      console.log("Map spot clicked:", spot);
+      onSpotSelect(spot);
+    }
+  };
+
   return (
     <div className={cn("relative border rounded-xl bg-camping-green-light/30 overflow-hidden", className)}>
       <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm">
@@ -91,7 +98,7 @@ const ZoneMap: React.FC<ZoneMapProps> = ({
                       transform: `translate(-50%, -50%) ${isSelected || isHovered ? 'scale(1.05)' : 'scale(1)'}`,
                       zIndex: isSelected || isHovered ? 10 : 1
                     }}
-                    onClick={() => !isDisabled && onSpotSelect?.(spot)}
+                    onClick={() => handleSpotClick(spot)}
                     onMouseEnter={() => setHoveredSpot(spot.id)}
                     onMouseLeave={() => setHoveredSpot(null)}
                     disabled={isDisabled}

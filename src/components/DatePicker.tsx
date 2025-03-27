@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
 
 interface DatePickerProps {
   dateRange: DateRange;
@@ -24,6 +25,23 @@ const DatePicker: React.FC<DatePickerProps> = ({
   onDateRangeChange,
   className,
 }) => {
+  const { toast } = useToast();
+
+  const handleSelectDate = (selected: DateRange) => {
+    console.log("Calendar selected:", selected);
+    onDateRangeChange({
+      from: selected?.from,
+      to: selected?.to,
+    });
+    
+    if (selected.from && selected.to) {
+      toast({
+        title: "เลือกวันที่แล้ว",
+        description: `วันที่: ${format(selected.from, "P", { locale: th })} - ${format(selected.to, "P", { locale: th })}`,
+      });
+    }
+  };
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -55,18 +73,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={dateRange.from}
+            defaultMonth={dateRange.from || new Date()}
             selected={{ 
               from: dateRange.from, 
               to: dateRange.to 
             }}
-            onSelect={(selected) => {
-              console.log("Calendar selected:", selected);
-              onDateRangeChange({
-                from: selected?.from,
-                to: selected?.to,
-              });
-            }}
+            onSelect={handleSelectDate}
             numberOfMonths={2}
             className={cn("p-3 pointer-events-auto")}
           />
